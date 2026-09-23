@@ -1,6 +1,6 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
-from django.shortcuts import get_object_or_404
+from rest_framework.exceptions import ValidationError
 from .models import Ad
 from .serializers import AdSerializer
 
@@ -12,6 +12,13 @@ class AdListCreateView(generics.ListCreateAPIView):
         queryset = Ad.objects.all()
 
         status_filter = self.request.query_params.get('status', 'published')
+
+        if status_filter not in ['draft', 'published', 'archived']:
+            raise ValidationError({
+                'status': f'Недопустимое значение: {status_filter}. '
+                          f'Допустимо: draft, published, archived.'
+            })
+
         queryset = queryset.filter(status=status_filter)
 
         search = self.request.query_params.get('search')
