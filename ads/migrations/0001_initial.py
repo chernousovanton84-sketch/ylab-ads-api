@@ -5,40 +5,72 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Author',
+            name="Author",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=120)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=120)),
             ],
             options={
-                'verbose_name': 'Автор',
-                'verbose_name_plural': 'Авторы',
+                "verbose_name": "Автор",
+                "verbose_name_plural": "Авторы",
             },
         ),
         migrations.CreateModel(
-            name='Ad',
+            name="Ad",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=120)),
-                ('description', models.TextField(max_length=5000)),
-                ('price', models.DecimalField(decimal_places=2, max_digits=11)),
-                ('status', models.CharField(choices=[('draft', 'Черновик'), ('published', 'Опубликовано'), ('archived', 'Архив')], default='draft', max_length=10)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='ads', to='ads.author')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=120)),
+                ("description", models.TextField(max_length=5000)),
+                ("price", models.DecimalField(decimal_places=2, max_digits=11)),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("draft", "Черновик"),
+                            ("published", "Опубликовано"),
+                            ("archived", "Архив"),
+                        ],
+                        default="draft",
+                        max_length=10,
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "author",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="ads",
+                        to="ads.author",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Объявление',
-                'verbose_name_plural': 'Объявления',
-                'ordering': ['-created_at', '-id'],
+                "verbose_name": "Объявление",
+                "verbose_name_plural": "Объявления",
+                "ordering": ["-created_at", "-id"],
             },
         ),
     ]

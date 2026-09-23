@@ -11,21 +11,23 @@ class AdListCreateView(generics.ListCreateAPIView):
     def get_queryset(self):
         queryset = Ad.objects.all()
 
-        status_filter = self.request.query_params.get('status', 'published')
+        status_filter = self.request.query_params.get("status", "published")
 
-        if status_filter not in ['draft', 'published', 'archived']:
-            raise ValidationError({
-                'status': f'Недопустимое значение: {status_filter}. '
-                          f'Допустимо: draft, published, archived.'
-            })
+        if status_filter not in ["draft", "published", "archived"]:
+            raise ValidationError(
+                {
+                    "status": f"Недопустимое значение: {status_filter}. "
+                    f"Допустимо: draft, published, archived."
+                }
+            )
 
         queryset = queryset.filter(status=status_filter)
 
-        search = self.request.query_params.get('search')
+        search = self.request.query_params.get("search")
         if search:
             queryset = queryset.filter(title__icontains=search)
 
-        return queryset.order_by('-created_at', '-id')
+        return queryset.order_by("-created_at", "-id")
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -39,11 +41,9 @@ class AdDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = AdSerializer
 
     def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', True)
+        partial = kwargs.pop("partial", True)
         instance = self.get_object()
-        serializer = self.get_serializer(
-            instance, data=request.data, partial=partial
-        )
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
