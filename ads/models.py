@@ -14,24 +14,16 @@ class Author(models.Model):
 
 class Ad(models.Model):
     STATUS_CHOICES = [
-        ('draft', 'Черновик'),
-        ('published', 'Опубликовано'),
-        ('archived', 'Архив'),
+        ("draft", "Черновик"),
+        ("published", "Опубликовано"),
+        ("archived", "Архив"),
     ]
 
     title = models.CharField(max_length=120)
     description = models.TextField(max_length=5000)
     price = models.DecimalField(max_digits=11, decimal_places=2)
-    status = models.CharField(
-        max_length=10,
-        choices=STATUS_CHOICES,
-        default='draft'
-    )
-    author = models.ForeignKey(
-        Author,
-        on_delete=models.CASCADE,
-        related_name='ads'
-    )
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="draft")
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name="ads")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -41,4 +33,4 @@ class Ad(models.Model):
     class Meta:
         verbose_name = "Объявление"
         verbose_name_plural = "Объявления"
-        ordering = ['-created_at', '-id']
+        ordering = ["-created_at", "-id"]
