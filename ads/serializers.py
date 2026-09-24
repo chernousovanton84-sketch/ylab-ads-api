@@ -24,6 +24,7 @@ class AdSerializer(serializers.ModelSerializer):
             "status",
             "author",
             "author_id",
+            "expires_at",
             "created_at",
             "updated_at",
         ]

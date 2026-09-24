@@ -24,6 +24,9 @@ class Ad(models.Model):
     price = models.DecimalField(max_digits=11, decimal_places=2)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="draft")
     author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name="ads")
+    expires_at = models.DateTimeField(
+        null=True, blank=True, help_text="Дата и время окончания публикации"
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

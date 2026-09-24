@@ -106,3 +106,89 @@ class TestAdAPI:
         response = api_client.get("/api/ads/?search=ноутбук")
         assert response.status_code == 200
         assert len(response.data) == 1
+
+
+@pytest.mark.django_db
+class TestArchiveExpiredAds:
+    def test_archive_expired_ads(self, author):
+        """Просроченные published → archived."""
+        from django.utils import timezone
+        from datetime import timedelta
+        from .tasks import archive_expired_ads
+
+        past = timezone.now() - timedelta(hours=1)
+        ad = Ad.objects.create(
+            title="Просроченное",
+            description="Описание",
+            price="1000.00",
+            status="published",
+            expires_at=past,
+            author=author,
+        )
+
+        result = archive_expired_ads()
+        ad.refresh_from_db()
+
+        assert ad.status == "archived"
+        assert "Archived 1 ads" in result
+
+    def test_not_archive_without_expires(self, author):
+        """Без expires_at остаётся published."""
+        from .tasks import archive_expired_ads
+
+        ad = Ad.objects.create(
+            title="Без срока",
+            description="Описание",
+            price="1000.00",
+            status="published",
+            expires_at=None,
+            author=author,
+        )
+
+        archive_expired_ads()
+        ad.refresh_from_db()
+
+        assert ad.status == "published"
+
+    def test_not_archive_future_expires(self, author):
+        """Будущий expires_at — остаётся published."""
+        from django.utils import timezone
+        from datetime import timedelta
+        from .tasks import archive_expired_ads
+
+        future = timezone.now() + timedelta(hours=1)
+        ad = Ad.objects.create(
+            title="Будущее",
+            description="Описание",
+            price="1000.00",
+            status="published",
+            expires_at=future,
+            author=author,
+        )
+
+        archive_expired_ads()
+        ad.refresh_from_db()
+
+        assert ad.status == "published"
+
+    def test_idempotent(self, author):
+        """Повторный запуск безопасен."""
+        from django.utils import timezone
+        from datetime import timedelta
+        from .tasks import archive_expired_ads
+
+        past = timezone.now() - timedelta(hours=1)
+        ad = Ad.objects.create(
+            title="Просроченное",
+            description="Описание",
+            price="1000.00",
+            status="published",
+            expires_at=past,
+            author=author,
+        )
+
+        archive_expired_ads()
+        archive_expired_ads()
+        ad.refresh_from_db()
+
+        assert ad.status == "archived"
