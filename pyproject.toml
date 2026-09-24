@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "ylab-ads-api"
+version = "0.1.0"
+description = "REST API для сервиса объявлений (тестовое задание Y_LAB)"
+authors = ["Anton Chernousov <chernousovanto@mail.ru>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+Django = "6.1.1"
+djangorestframework = "3.18.1"
+psycopg2-binary = "2.9.13"
+python-dotenv = "1.2.3"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^9.1.1"
+pytest-django = "^4.14.0"
+pre-commit = "^4.6.2"
+ruff = "^0.16.8"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
