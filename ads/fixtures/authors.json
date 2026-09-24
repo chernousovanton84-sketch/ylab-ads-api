@@ -1,0 +1,23 @@
+[
+  {
+    "model": "ads.author",
+    "pk": 1,
+    "fields": {
+      "name": "Иван Иванов"
+    }
+  },
+  {
+    "model": "ads.author",
+    "pk": 2,
+    "fields": {
+      "name": "Пётр Петров"
+    }
+  },
+  {
+    "model": "ads.author",
+    "pk": 3,
+    "fields": {
+      "name": "Анна Сидорова"
+    }
+  }
+]
